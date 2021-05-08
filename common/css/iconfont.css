@@ -1,0 +1,26 @@
+@font-face {
+  font-family: "lightbox-icon"; /* Project id 2526620 */
+  src: url('../font/iconfont.woff2?t=1620142375149') format('woff2'),
+       url('../font/iconfont.woff?t=1620142375149') format('woff'),
+       url('../font/iconfont.ttf?t=1620142375149') format('truetype');
+}
+
+.lightbox-icon {
+  font-family: "lightbox-icon" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-menu:before {
+  content: "\e7c5";
+}
+
+.icon-xiala:before {
+  content: "\e6b9";
+}
+
+.icon-cha-:before {
+  content: "\e614";
+}
