@@ -3,12 +3,16 @@
     class="lightbox"
     v-if="data.length > 0"
   >
-    <div class="lightbox-list" v-if="mode === '1'">
+    <div
+      class="lightbox-list"
+      v-if="mode === '1'"
+      :style="listStyle"
+    >
       <div
         class="lightbox-item"
         v-for="(item, index) of data"
         :key="index"
-        :style="baseCss"
+        :style="itemStyle"
         @click="openLightbox(index)"
       >
         <img
@@ -111,13 +115,41 @@ export default defineComponent({
   setup(props, { emit }) {
 
     const dataInit = computed<DataListProps>(() => props.data as DataListProps)
-    const baseCss = computed(() => {
-      const { spaceBetween = 24 } = props.options as LightBoxOptions
-      const baseCss = {
+
+    const itemStyle = computed(() => {
+      const { spaceBetween = 24, isFull = false } = props.options as LightBoxOptions
+      const styleKey = isFull ? 'width' : 'maxWidth'
+      const style = {
         marginRight: `${spaceBetween}px`,
-        width: `calc((100% - (${spaceBetween}px * ${dataInit.value.length - 1})) / ${dataInit.value.length})`
+        [styleKey]: `calc((100% - (${spaceBetween}px * ${dataInit.value.length - 1})) / ${dataInit.value.length})`
       }
-      return baseCss
+      return style
+    })
+    const listStyle = computed(() => {
+      const { listHeight, itemPosition = 'center' } = props.options as LightBoxOptions,
+        style: {
+          height?: string;
+          justifyContent?: string;
+        } = {};
+      let position
+        
+      switch (itemPosition) {
+        case 'left':
+          position = 'end'
+          break;
+        case 'right':
+          position = 'flex-end'
+          break;
+        case 'center':
+        default:
+          position = 'center'
+          break;
+      }
+
+      listHeight ? style['height'] = `${listHeight}px` : ''
+      style['justifyContent'] = position
+
+      return style
     })
 
     const {
@@ -132,7 +164,8 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
-      baseCss,
+      itemStyle,
+      listStyle,
       openLightbox,
       handleClick,
       onSidebarItemClick,
@@ -147,20 +180,24 @@ export default defineComponent({
 <style scoped>
 .lightbox-list {
   width: 100%;
-  height: 220px;
   display: flex;
-  align-items: center;
   overflow: hidden;
+  align-items: center;
   box-sizing: border-box;
 }
 .lightbox-item {
   flex-shrink: 0;
+  height: inherit;
   cursor: pointer;
   box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .lightbox-item img {
-  width: 100%;
   height: auto;
+  max-width: 100%;
+  max-height: 100%;
 }
 .lightbox-overlay {
   display: flex;

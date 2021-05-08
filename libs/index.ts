@@ -2,21 +2,30 @@ import { reactive, ComputedRef, watch, onUnmounted } from "vue"
 import { DataListProps, EventEmit } from '../types'
 import { throttle } from "./utlis"
 
+interface StateProps {
+  isShow: boolean;
+  sidebarIsShow: boolean;
+  isLoaded: boolean;
+  isButtonShow: boolean;
+  currentId: number;
+  timer: undefined | number;
+}
+
 export function useLightBox(buttonShowTime: number, data: ComputedRef<DataListProps>, emit: EventEmit) {
-  const state = reactive({
+  const state = reactive<StateProps>({
     isShow: false,
     sidebarIsShow: false,
     isLoaded: false,
     isButtonShow: false,
     currentId: 0,
-    timer: null
+    timer: undefined
   })
 
   /**
    * 重置 setTimeout
   */
   const resetTimer = () => {
-    clearTimeout(state.timer)
+    if(state.timer) clearTimeout(state.timer)
     if (state.isButtonShow) {
       state.timer = setTimeout(
         () => state.isButtonShow = false,

@@ -1,5 +1,10 @@
+type ItemPosition = 'left' | 'right' | 'center'
+
 export interface LightBoxOptions {
   spaceBetween?: number;
+  listHeight?: number;
+  itemPosition?: ItemPosition;
+  isFull?: boolean;
 }
 
 export interface DataItemProps {

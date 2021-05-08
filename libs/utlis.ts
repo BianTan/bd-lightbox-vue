@@ -5,7 +5,7 @@ export const throttle = <T extends (...args: any[]) => any>(callback: T, delay =
   let timer: ReturnType<typeof setTimeout> | null = null
   return (...args: Parameters<T>): ReturnType<T> => {
     let result: any;
-    if(timer) return
+    if(timer) return result
     if(tiggleNow) {
       result = callback(args)
       timer = setTimeout(() => {

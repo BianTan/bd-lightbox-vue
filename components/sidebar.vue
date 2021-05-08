@@ -4,10 +4,10 @@
       v-for="(item, index) in list"
       :key="index"
       @click="handleItemClick(index)"
-      class="sidebar-list"
+      class="sidebar-item"
     >
       <img
-        class="list-item"
+        class="item-img"
         :alt="typeof item === 'string' ? '' : item.alt"
         :src="typeof item === 'string' ? item : item.src"
         :style="{ borderColor: index === currentId ? 'rgba(248, 113, 113)' : 'transparent' }"
@@ -49,18 +49,23 @@ export default defineComponent({
   background-color: #FFFFFF;
   overflow: hidden;
   overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: flex-start;
 }
-.lightbox-sidebar .sidebar-list {
+.lightbox-sidebar .sidebar-item {
   width: 100%;
   height: 128px;
   cursor: pointer;
   overflow: hidden;
   display: inline-block;
 }
-.lightbox-sidebar .sidebar-list .list-item {
+.lightbox-sidebar .sidebar-item .item-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  box-sizing: border-box;
   border: 4px solid transparent;
   transition: border .3s ease-in-out;
 }
@@ -68,7 +73,7 @@ export default defineComponent({
   .lightbox-sidebar {
     width: 256px;
   }
-  .lightbox-sidebar .sidebar-list {
+  .lightbox-sidebar .sidebar-item {
     width: 50%;
   }
 }

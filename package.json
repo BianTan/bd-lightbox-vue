@@ -1,6 +1,6 @@
 {
   "name": "bd-lightbox-vue",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A Vue3.0 component - lightbox",
   "main": "./index.js",
   "scripts": {
@@ -13,11 +13,11 @@
     "lightbox"
   ],
   "bugs": {
-    "url": "https://github.com/BianTan/db-lightbox-vue/issues"
+    "url": "https://github.com/BianTan/bd-lightbox-vue/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BianTan/db-lightbox-vue.git"
+    "url": "git+https://github.com/BianTan/bd-lightbox-vue.git"
   },
   "author": {
     "name": "BianTan",

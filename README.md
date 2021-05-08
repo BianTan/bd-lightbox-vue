@@ -32,7 +32,7 @@ createApp(App).use(VueLightbox)
       }"
     >
     </div>
-    <vue-lightbox ref="lightboxRef" :data="imgArry" />
+    <vue-lightbox ref="lightboxRef" :data="images" />
   </div>
 </template>
 
@@ -46,11 +46,11 @@ createApp(App).use(VueLightbox)
     },
     setup() {
       const content = 'xxxx' // 这里是文章的html内容，包含图片
-      const imgArry = ref(null)
+      const images = ref(null)
       const instance = getCurrentInstance() // 获取内部组件的实例
 
       const getImgs = (imgs): void => { // 回调函数，imgs是
-        imgArry.value = imgs
+        images.value = imgs
       }
       const openLightbox = (id?: string) => {
         (instance.refs.lightboxRef as any).openLightbox(id)
@@ -59,6 +59,7 @@ createApp(App).use(VueLightbox)
       return {
         content,
         getImgs,
+        images,
         openLightbox
       }
     }
@@ -72,7 +73,7 @@ createApp(App).use(VueLightbox)
 <template>
   <div>
     <p>这是文章标题</p>
-    <vue-lightbox :data="imgArry" :options="options" mode="1" />
+    <vue-lightbox :data="images" :options="options" mode="1" />
   </div>
 </template>
 
@@ -82,9 +83,12 @@ createApp(App).use(VueLightbox)
   export default defineComponent({
     setup() {
       const options = {
-        spaceBetween: 32 // 可不传，默认为24
+        spaceBetween: 32, // 可不传，单位px 默认为24
+        listHeight: 32, // 可不传，单位px 默认为100%
+        itemPosition: 'left', // 可不传，值为 left | center | right 默认为 center 当 isFull 为 true 时无效果
+        isFull: true // 可不传，默认为 flase
       }
-      const imgArry = [
+      const images = [
         'images/1.png', // 字符串
         {
           src: 'images/2.png', // 必传,
@@ -95,7 +99,7 @@ createApp(App).use(VueLightbox)
 
       return {
         options,
-        imgArry
+        images
       }
     }
   })
@@ -116,3 +120,12 @@ LightBox 还会触发几个事件 ⬇️
 | `lightboxPrev` | 上一张图片 (按钮被点击 或者 点击键盘 方向键 ←) |
   
 以上均有一个参数 currnetId 为当前的图片 id（从0开始）  
+
+## 展示  
+### 电脑端 图片灯箱  
+
+![电脑端](https://github.com/BianTan/vok-vue3/raw/main/images/lightbox_pc.png)
+
+### 移动端 图片灯箱  
+
+![移动端](https://github.com/BianTan/vok-vue3/raw/main/images/lightbox_phone.png)
