@@ -1,4 +1,4 @@
-import VueLightbox from './index.vue'
+import VueLightbox from './components/index.vue'
 
 export default {
   install: (vue: any) => {
