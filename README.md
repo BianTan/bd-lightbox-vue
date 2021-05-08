@@ -1,4 +1,5 @@
-## 安装
+### 安装 
+## 如何使用 
 导入插件，并使用
 ```js
 import { createApp } from 'vue'
@@ -10,7 +11,6 @@ createApp(App).use(VueLightbox)
 ```
 <br>
 
-## 如何使用 
 ### 模式0（默认） 
 ```vue
 <template>
@@ -77,10 +77,12 @@ createApp(App).use(VueLightbox)
         spaceBetween: 32 // 可不传，默认为24
       }
       const imgArry = [
-        'images/1.png',
-        'images/2.png',
-        'images/3.png',
-        'images/4.png',
+        'images/1.png', // 字符串
+        {
+          src: 'images/2.png', // 必传,
+          desc: '这里是 description', // 可不传
+          alt: '这里是 alt' // 可不传
+        }  // 或者对象
       ]
 
       return {
@@ -92,3 +94,17 @@ createApp(App).use(VueLightbox)
 </script>
 
 ```
+
+## 事件
+
+LightBox 还会触发几个事件 ⬇️  
+
+| 事件名称 | 描述 |
+|:------| :------ |
+| `lightboxOpen` | 遮罩打开 |
+| `lightboxClose` | 遮罩关闭 (按钮被点击 或者 点击键盘 Esc or Space) |
+| `lightboxSwitch` | 点击 lightbox 的侧边栏切换图片 |
+| `lightboxNext` | 下一张图片 (按钮被点击 或者 点击键盘 方向键 →) |
+| `lightboxPrev` | 上一张图片 (按钮被点击 或者 点击键盘 方向键 ←) |
+  
+以上均有一个参数 currnetId 为当前的图片 id（从0开始）  

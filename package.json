@@ -1,7 +1,7 @@
 {
   "name": "bd-lightbox-vue",
-  "version": "1.0.2",
-  "description": "A Vue3.0 component",
+  "version": "1.0.4",
+  "description": "A Vue3.0 component - lightbox",
   "main": "./index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

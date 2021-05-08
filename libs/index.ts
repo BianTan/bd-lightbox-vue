@@ -1,7 +1,8 @@
-import { reactive, ComputedRef, watch } from "vue"
+import { reactive, ComputedRef, watch, onUnmounted } from "vue"
+import { DataListProps, EventEmit } from '../types'
 import { throttle } from "./utlis"
 
-export function useLightBox(buttonShowTime: number, data: ComputedRef<string[]>) {
+export function useLightBox(buttonShowTime: number, data: ComputedRef<DataListProps>, emit: EventEmit) {
   const state = reactive({
     isShow: false,
     sidebarIsShow: false,
@@ -29,13 +30,14 @@ export function useLightBox(buttonShowTime: number, data: ComputedRef<string[]>)
   */
   const openLightbox = (id: string | number = 0): void => {
     state.currentId = typeof id === 'number' ? id >>> 0 : parseInt(id as string)
-    state.currentId = state.currentId < data.value.length - 1 ? state.currentId : 0
+    state.currentId = state.currentId < data.value.length ? state.currentId : 0
     state.isShow = state.isButtonShow = true
+    emit('lightboxOpen', state.currentId)
   }
   /**
    * 图片暗箱 wrapper 点击
   */
-  const handleClick = (e: any): void => {
+  const handleClick = (e: Event): void => {
     if (e.target === e.currentTarget)
       state.sidebarIsShow
         ? (state.sidebarIsShow = false)
@@ -47,6 +49,7 @@ export function useLightBox(buttonShowTime: number, data: ComputedRef<string[]>)
   */
   const onSidebarItemClick = (id: number): void => {
     state.currentId = id
+    emit('lightboxSwitch', state.currentId)
     resetTimer()
   }
   /**
@@ -56,6 +59,7 @@ export function useLightBox(buttonShowTime: number, data: ComputedRef<string[]>)
     state.currentId > 0
       ? state.currentId--
       : (state.currentId = data.value.length - 1)
+    emit('lightboxPrev', state.currentId)
     resetTimer()
   }
   /**
@@ -65,6 +69,7 @@ export function useLightBox(buttonShowTime: number, data: ComputedRef<string[]>)
     state.currentId < data.value.length - 1
       ? state.currentId++
       : (state.currentId = 0)
+      emit('lightboxNext', state.currentId)
     resetTimer()
   }
   /**
@@ -101,28 +106,39 @@ export function useLightBox(buttonShowTime: number, data: ComputedRef<string[]>)
   const throttleKeydoen = throttle(keydown)
   const throttleShow = throttle(buttonShow, 50)
 
-  /**
-   * 监听状态变化
-  */
-  watch([() => state.isButtonShow, () => state.isShow], newValue => {
-    clearTimeout(state.timer)
-    if (newValue[0]) {
-      // 这个是 isButtonShow
-      state.timer = setTimeout(
-        () => (state.isButtonShow = false),
-        buttonShowTime
-      )
-    }
-    if (newValue[1]) {
-      // 这个是 isShow
+  const setEvent = (isAdd = true) => {
+    if(isAdd) {
       document.body.style.overflow = 'hidden'
       window.addEventListener('keydown', throttleKeydoen)
       window.addEventListener('mousemove', throttleShow)
-    } else if (!newValue[1]) {
+    } else {
       document.body.style.overflow = 'auto'
       window.removeEventListener('keydown', throttleKeydoen)
       window.removeEventListener('mousemove', throttleShow)
     }
+  }
+
+  /**
+   * 监听状态变化
+  */
+  watch([() => state.isButtonShow, () => state.isShow], (newValue, oldValue) => {
+    if(newValue[0] !== oldValue[0]) {
+      clearTimeout(state.timer)
+      if (newValue[0]) {
+        // 这个是 isButtonShow
+        state.timer = setTimeout(
+          () => (state.isButtonShow = false),
+          buttonShowTime
+        )
+      }
+    }
+    // 这个是 isShow
+    if (newValue[1] !== oldValue[1] && !newValue[1]) emit('lightboxClose', state.currentId)
+    setEvent(newValue[1])
+  })
+
+  onUnmounted(() => {
+    setEvent(false)
   })
 
   return {

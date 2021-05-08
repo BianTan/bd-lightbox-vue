@@ -1,14 +1,15 @@
 <template>
   <div class="lightbox-sidebar">
     <li
-      v-for="(img, index) in list"
+      v-for="(item, index) in list"
       :key="index"
       @click="handleItemClick(index)"
       class="sidebar-list"
     >
       <img
-        :src="img"
         class="list-item"
+        :alt="typeof item === 'string' ? '' : item.alt"
+        :src="typeof item === 'string' ? item : item.src"
         :style="{ borderColor: index === currentId ? 'rgba(248, 113, 113)' : 'transparent' }"
       />
     </li>
@@ -17,12 +18,13 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
+import { DataListProps } from '../types'
 
 export default defineComponent({
   props: {
     list: {
-      type: Array as PropType<string[]>,
-      default: (): [] => []
+      type: Array as PropType<DataListProps>,
+      default: (): DataListProps => []
     },
     currentId: {
       type: Number,

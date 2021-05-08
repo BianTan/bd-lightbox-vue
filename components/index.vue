@@ -3,7 +3,7 @@
     class="lightbox"
     v-if="data.length > 0"
   >
-    <div class="lightbox-main" v-if="mode === '1'">
+    <div class="lightbox-list" v-if="mode === '1'">
       <div
         class="lightbox-item"
         v-for="(item, index) of data"
@@ -11,23 +11,33 @@
         :style="baseCss"
         @click="openLightbox(index)"
       >
-        <img :src="item">
+        <img
+          :src="typeof item === 'string' ? item : item.src"
+          :alt="typeof item === 'string' ? '' : item.alt"
+        />
       </div>
     </div>
     <transition name="lightbox">
       <div class="lightbox-overlay" v-show="isShow && data.length > 0">
-        <div class="lightbox-wrapper" @click="handleClick">
-          <transition-group name="lightbox-main" tag="ul">
-            <img
-              v-for="(img, index) in data"
+        <div class="lightbox-wrapper">
+          <transition-group name="lightbox-row" tag="ul">
+            <div
+              class="lightbox-row"
+              v-for="(item, index) in data"
               :key="index"
-              :src="img"
               v-show="index === currentId"
-              @click="isButtonShow = !isButtonShow"
-              class="lightbox-img"
-            />
+              @click="handleClick"
+            >
+              <img
+                :src="typeof item === 'string' ? item : item.src"
+                :alt="typeof item === 'string' ? '' : item.alt"
+                @click="isButtonShow = !isButtonShow"
+                class="lightbox-img"
+              />
+              <p v-if="typeof item === 'object' && item.desc">{{item.desc}}</p>
+            </div>
           </transition-group>
-          <transition name="lightbox-main">
+          <transition name="lightbox-row">
             <div v-show="isButtonShow" class="lightbox-group">
               <span>{{ currentId + 1 }} / {{ data.length }}</span>
               <iconfont
@@ -62,13 +72,10 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType, toRefs } from 'vue'
+import { LightBoxOptions, DataListProps } from '../types'
 import { useLightBox } from '../libs'
 import iconfont from './iconfont.vue'
 import Sidebar from './sidebar.vue'
-
-interface LightBoxOptions {
-  spaceBetween?: number;
-}
 
 export default defineComponent({
   name: 'VueLightbox',
@@ -78,8 +85,8 @@ export default defineComponent({
   },
   props: {
     data: {
-      type: Array as PropType<string[]>,
-      default: (): [] => []
+      type: Array as PropType<DataListProps>,
+      default: (): DataListProps => []
     },
     buttonShowTime: {
       type: Number,
@@ -90,13 +97,20 @@ export default defineComponent({
       default: '0'
     },
     options: {
-      type: Object,
-      default: {}
+      type: Object as PropType<LightBoxOptions>,
+      default: (): LightBoxOptions => ({})
     }
   },
-  setup(props) {
+  emits: [
+    'lightboxOpen',
+    'lightboxClose',
+    'lightboxNext',
+    'lightboxPrev',
+    'lightboxSwitch'
+  ],
+  setup(props, { emit }) {
 
-    const dataInit = computed<string[]>(() => props.data as string[])
+    const dataInit = computed<DataListProps>(() => props.data as DataListProps)
     const baseCss = computed(() => {
       const { spaceBetween = 24 } = props.options as LightBoxOptions
       const baseCss = {
@@ -114,7 +128,7 @@ export default defineComponent({
       goPrev,
       goNext,
       switchSidebarState
-    } = useLightBox(props.buttonShowTime as number, dataInit)
+    } = useLightBox(props.buttonShowTime as number, dataInit, emit)
 
     return {
       ...toRefs(state),
@@ -131,7 +145,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.lightbox-main {
+.lightbox-list {
   width: 100%;
   height: 220px;
   display: flex;
@@ -166,13 +180,25 @@ export default defineComponent({
   flex: 1;
   position: relative;
 }
+.lightbox-wrapper ul,
+.lightbox-row {
+  width: 100%;
+  height: 100%;
+}
+.lightbox-row {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+.lightbox-row p {
+  color: #FFF;
+  margin-top: 24px;
+  text-align: center;
+}
 .lightbox-img {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: 90%;
-  max-height: 90%;
+  max-width: 80%;
+  max-height: 80%;
   cursor: pointer;
 }
 .lightbox-group span {
@@ -215,17 +241,17 @@ export default defineComponent({
 .lightbox-leave-to {
   opacity: 0;
 }
-.lightbox-main-enter-active,
-.lightbox-main-leave-active {
+.lightbox-row-enter-active,
+.lightbox-row-leave-active {
   transition: all .2s ease-in-out;
   opacity: 0;
 }
-.lightbox-main-enter-to,
-.lightbox-main-leave-from {
+.lightbox-row-enter-to,
+.lightbox-row-leave-from {
   opacity: 1;
 }
-.lightbox-main-enter-from,
-.lightbox-main-leave-to {
+.lightbox-row-enter-from,
+.lightbox-row-leave-to {
   opacity: 0;
 }
 </style>
