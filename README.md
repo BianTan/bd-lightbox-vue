@@ -1,5 +1,12 @@
-### 安装 
-## 如何使用 
+## 安装 
+```
+npm install --save bd-lightbox-vue
+```
+Or
+```
+yarn add bd-lightbox-vue
+```
+
 导入插件，并使用
 ```js
 import { createApp } from 'vue'
@@ -11,6 +18,7 @@ createApp(App).use(VueLightbox)
 ```
 <br>
 
+## 如何使用 
 ### 模式0（默认） 
 ```vue
 <template>
