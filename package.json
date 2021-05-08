@@ -1,19 +1,29 @@
 {
   "name": "bd-lightbox-vue",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A Vue3.0 component",
   "main": "./index.js",
-  "types": "./types/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
+    "vue",
     "vue3.0",
     "typescript",
     "lightbox"
   ],
-  "author": "BianTan",
-  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BianTan/db-lightbox-vue/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BianTan/db-lightbox-vue.git"
+  },
+  "author": {
+    "name": "BianTan",
+    "email": "biantan@outlook.com"
+  },
+  "license": "MIT",
   "dependencies": {
     "vue": "3.0"
   }

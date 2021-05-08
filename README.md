@@ -11,6 +11,7 @@ createApp(App).use(VueLightbox)
 <br>
 
 ## 如何使用 
+### 模式0（默认） 
 ```vue
 <template>
   <div>
@@ -48,9 +49,43 @@ createApp(App).use(VueLightbox)
       }
 
       return {
-        content，
+        content,
         getImgs,
         openLightbox
+      }
+    }
+  })
+</script>
+
+```
+
+### 模式1 
+```vue
+<template>
+  <div>
+    <p>这是文章标题</p>
+    <vue-lightbox :data="imgArry" :options="options" mode="1" />
+  </div>
+</template>
+
+<script lang="ts">
+  import { defineComponent }  from 'vue'
+
+  export default defineComponent({
+    setup() {
+      const options = {
+        spaceBetween: 32 // 可不传，默认为24
+      }
+      const imgArry = [
+        'images/1.png',
+        'images/2.png',
+        'images/3.png',
+        'images/4.png',
+      ]
+
+      return {
+        options,
+        imgArry
       }
     }
   })

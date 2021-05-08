@@ -1,10 +1,21 @@
 <template>
-  <transition name="lightbox">
-    <div
-      class="lightbox"
-      v-show="isShow && data.length > 0"
-    >
-      <div class="lightbox-main">
+  <div
+    class="lightbox"
+    v-if="data.length > 0"
+  >
+    <div class="lightbox-main" v-if="mode === '1'">
+      <div
+        class="lightbox-item"
+        v-for="(item, index) of data"
+        :key="index"
+        :style="baseCss"
+        @click="openLightbox(index)"
+      >
+        <img :src="item">
+      </div>
+    </div>
+    <transition name="lightbox">
+      <div class="lightbox-overlay" v-show="isShow && data.length > 0">
         <div class="lightbox-wrapper" @click="handleClick">
           <transition-group name="lightbox-main" tag="ul">
             <img
@@ -45,8 +56,8 @@
           @handleItemClick="onSidebarItemClick"
         />
       </div>
-    </div>
-  </transition>
+    </transition>
+  </div>
 </template>
 
 <script lang="ts">
@@ -54,6 +65,10 @@ import { computed, defineComponent, PropType, toRefs } from 'vue'
 import { useLightBox } from '../libs'
 import iconfont from './iconfont.vue'
 import Sidebar from './sidebar.vue'
+
+interface LightBoxOptions {
+  spaceBetween?: number;
+}
 
 export default defineComponent({
   name: 'VueLightbox',
@@ -69,11 +84,27 @@ export default defineComponent({
     buttonShowTime: {
       type: Number,
       default: 2300
+    },
+    mode: {
+      type: String,
+      default: '0'
+    },
+    options: {
+      type: Object,
+      default: {}
     }
   },
   setup(props) {
-    
-    const dataInit = computed(() => props.data as string[])
+
+    const dataInit = computed<string[]>(() => props.data as string[])
+    const baseCss = computed(() => {
+      const { spaceBetween = 24 } = props.options as LightBoxOptions
+      const baseCss = {
+        marginRight: `${spaceBetween}px`,
+        width: `calc((100% - (${spaceBetween}px * ${dataInit.value.length - 1})) / ${dataInit.value.length})`
+      }
+      return baseCss
+    })
 
     const {
       state,
@@ -87,6 +118,7 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
+      baseCss,
       openLightbox,
       handleClick,
       onSidebarItemClick,
@@ -99,7 +131,27 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.lightbox {
+.lightbox-main {
+  width: 100%;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.lightbox-item {
+  flex-shrink: 0;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.lightbox-item img {
+  width: 100%;
+  height: auto;
+}
+.lightbox-overlay {
+  display: flex;
+  width: 100%;
+  height: 100%;
   position: fixed;
   top: 0;
   left: 0;
@@ -109,11 +161,6 @@ export default defineComponent({
   overflow: hidden;
   user-select: none;
   background-color: rgba(31, 41, 55, .8);
-}
-.lightbox-main {
-  display: flex;
-  width: 100%;
-  height: 100%;
 }
 .lightbox-wrapper {
   flex: 1;

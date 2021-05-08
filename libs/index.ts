@@ -28,7 +28,8 @@ export function useLightBox(buttonShowTime: number, data: ComputedRef<string[]>)
    * 外部可以从 instance 中调用该方法，使用图片暗箱来展示指定图片
   */
   const openLightbox = (id: string | number = 0): void => {
-    state.currentId = typeof id === 'number' ? id : parseInt(id as string)
+    state.currentId = typeof id === 'number' ? id >>> 0 : parseInt(id as string)
+    state.currentId = state.currentId < data.value.length - 1 ? state.currentId : 0
     state.isShow = state.isButtonShow = true
   }
   /**
