@@ -28,7 +28,7 @@ export default function (buttonShowTime: number, data: ComputedRef<DataListProps
   const resetTimer = () => {
     if(state.timer) clearTimeout(state.timer)
     if (state.isButtonShow) {
-      state.timer = setTimeout(
+      state.timer = window.setTimeout(
         () => state.isButtonShow = false,
         buttonShowTime
       )
@@ -93,8 +93,8 @@ export default function (buttonShowTime: number, data: ComputedRef<DataListProps
   /**
    * keydown 事件
   */
-  const keydown = (e: KeyboardEvent): void => {
-    const type = e[0].code
+  const keydown = (value: Event | [KeyboardEvent]): void => {
+    const type = (value as [KeyboardEvent])[0].code
     switch (type) {
       case 'ArrowLeft':
         goPrev()
@@ -104,7 +104,7 @@ export default function (buttonShowTime: number, data: ComputedRef<DataListProps
         break
       case 'Escape':
       case 'Space':
-        e[0].preventDefault()
+        (value as [KeyboardEvent])[0].preventDefault()
         state.isShow = false
         break
     }
@@ -136,7 +136,7 @@ export default function (buttonShowTime: number, data: ComputedRef<DataListProps
       clearTimeout(state.timer)
       if (newValue[0]) {
         // 这个是 isButtonShow
-        state.timer = setTimeout(
+        state.timer = window.setTimeout(
           () => (state.isButtonShow = false),
           buttonShowTime
         )

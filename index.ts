@@ -3,7 +3,7 @@ import lightbox from './src/directives'
 import { App } from 'vue'
 
 export default {
-  install: (vue: App) => {
+  install: (vue: App): void => {
     vue.component(BdLightbox.name, BdLightbox)
   }
 }
