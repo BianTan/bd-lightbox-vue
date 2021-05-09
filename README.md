@@ -7,14 +7,29 @@ Or
 yarn add bd-lightbox-vue
 ```
 
-导入插件，并使用
+导入插件，并使用  
+全局导入  
 ```js
 import { createApp } from 'vue'
 import App from './App.vue'
 
-import VueLightbox from 'bd-lightbox-vue'
+import BdLightbox from 'bd-lightbox-vue'
 
-createApp(App).use(VueLightbox)
+createApp(App).use(BdLightbox)
+```
+按需导入  
+```vue
+<script lang="ts">
+import { defineComponent } from 'vue'
+import { BdLightbox } from 'bd-lightbox-vue'
+
+export default defineComponent({
+  components: {
+    BdLightbox
+  }
+})
+</script>
+
 ```
 <br>
 
@@ -32,13 +47,13 @@ createApp(App).use(VueLightbox)
       }"
     >
     </div>
-    <vue-lightbox ref="lightboxRef" :data="images" />
+    <BdLightbox ref="lightboxRef" :data="images" />
   </div>
 </template>
 
 <script lang="ts">
   import { defineComponent, getCurrentInstance, ref }  from 'vue'
-  import lightbox from 'bd-lightbox-vue/directives'
+  import { lightbox } from 'bd-lightbox-vue'
 
   export default defineComponent({
     directives: {
@@ -49,8 +64,8 @@ createApp(App).use(VueLightbox)
       const images = ref(null)
       const instance = getCurrentInstance() // 获取内部组件的实例
 
-      const getImgs = (imgs): void => { // 回调函数，imgs是
-        images.value = imgs
+      const getImgs = (images): void => {
+        images.value = images
       }
       const openLightbox = (id?: string) => {
         (instance.refs.lightboxRef as any).openLightbox(id)
@@ -73,7 +88,7 @@ createApp(App).use(VueLightbox)
 <template>
   <div>
     <p>这是文章标题</p>
-    <vue-lightbox :data="images" :options="options" mode="1" />
+    <BdLightbox :data="images" :options="options" mode="1" />
   </div>
 </template>
 
@@ -83,8 +98,9 @@ createApp(App).use(VueLightbox)
   export default defineComponent({
     setup() {
       const options = {
-        spaceBetween: 32, // 可不传，单位px 默认为24
-        listHeight: 32, // 可不传，单位px 默认为100%
+        buttonShowTime: 5000, // 可不传，单位 ms 默认为 2300
+        spaceBetween: 32, // 可不传，单位 px 默认为 24
+        listHeight: 32, // 可不传，单位 px 默认为 100%
         itemPosition: 'left', // 可不传，值为 left | center | right 默认为 center 当 isFull 为 true 时无效果
         isFull: true // 可不传，默认为 flase
       }

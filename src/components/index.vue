@@ -77,12 +77,12 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, toRefs } from 'vue'
 import { LightBoxOptions, DataListProps } from '../types'
-import { useLightBox } from '../libs'
+import { useLightBox, useStyle } from '../libs'
 import iconfont from './iconfont.vue'
 import Sidebar from './sidebar.vue'
 
 export default defineComponent({
-  name: 'VueLightbox',
+  name: 'BdLightbox',
   components: {
     iconfont,
     Sidebar
@@ -91,10 +91,6 @@ export default defineComponent({
     data: {
       type: Array as PropType<DataListProps>,
       default: (): DataListProps => []
-    },
-    buttonShowTime: {
-      type: Number,
-      default: 2300
     },
     mode: {
       type: String,
@@ -114,43 +110,13 @@ export default defineComponent({
   ],
   setup(props, { emit }) {
 
+    const options = computed(() => props.options as LightBoxOptions)
     const dataInit = computed<DataListProps>(() => props.data as DataListProps)
 
-    const itemStyle = computed(() => {
-      const { spaceBetween = 24, isFull = false } = props.options as LightBoxOptions
-      const styleKey = isFull ? 'width' : 'maxWidth'
-      const style = {
-        marginRight: `${spaceBetween}px`,
-        [styleKey]: `calc((100% - (${spaceBetween}px * ${dataInit.value.length - 1})) / ${dataInit.value.length})`
-      }
-      return style
-    })
-    const listStyle = computed(() => {
-      const { listHeight, itemPosition = 'center' } = props.options as LightBoxOptions,
-        style: {
-          height?: string;
-          justifyContent?: string;
-        } = {};
-      let position
-        
-      switch (itemPosition) {
-        case 'left':
-          position = 'end'
-          break;
-        case 'right':
-          position = 'flex-end'
-          break;
-        case 'center':
-        default:
-          position = 'center'
-          break;
-      }
-
-      listHeight ? style['height'] = `${listHeight}px` : ''
-      style['justifyContent'] = position
-
-      return style
-    })
+    const {
+      itemStyle,
+      listStyle,
+    } = useStyle(options, dataInit)
 
     const {
       state,
@@ -160,7 +126,7 @@ export default defineComponent({
       goPrev,
       goNext,
       switchSidebarState
-    } = useLightBox(props.buttonShowTime as number, dataInit, emit)
+    } = useLightBox(options.value.buttonShowTime || 2300, dataInit, emit)
 
     return {
       ...toRefs(state),

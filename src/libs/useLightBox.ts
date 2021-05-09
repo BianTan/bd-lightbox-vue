@@ -1,18 +1,19 @@
-import { reactive, ComputedRef, watch, onUnmounted } from "vue"
-import { DataListProps, EventEmit } from '../types'
+import { reactive, ComputedRef, watch, onUnmounted } from 'vue'
+import { DataListProps, EventEmit, LightBoxState, UseLightBoxProps } from '../types'
 import { throttle } from "./utlis"
 
-interface StateProps {
-  isShow: boolean;
-  sidebarIsShow: boolean;
-  isLoaded: boolean;
-  isButtonShow: boolean;
-  currentId: number;
-  timer: undefined | number;
-}
+/**
+ * @param {number} buttonShowTime 按钮展示时间
+ * @param {ComputedRef<DataListProps>} data 展示的图片地址、信息的数组
+ * @param {EventEmit} emit
+ * @return {UseLightBoxProps} UseLightBoxProps
+*/
+export default function (buttonShowTime: number, data: ComputedRef<DataListProps>, emit: EventEmit): UseLightBoxProps {
 
-export function useLightBox(buttonShowTime: number, data: ComputedRef<DataListProps>, emit: EventEmit) {
-  const state = reactive<StateProps>({
+  /**
+   * 状态管理
+  */
+  const state = reactive<LightBoxState>({
     isShow: false,
     sidebarIsShow: false,
     isLoaded: false,
@@ -92,7 +93,7 @@ export function useLightBox(buttonShowTime: number, data: ComputedRef<DataListPr
   /**
    * keydown 事件
   */
-  const keydown = (e: any): void => {
+  const keydown = (e: KeyboardEvent): void => {
     const type = e[0].code
     switch (type) {
       case 'ArrowLeft':

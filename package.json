@@ -1,8 +1,8 @@
 {
   "name": "bd-lightbox-vue",
-  "version": "1.0.5",
+  "version": "2.0.0-beta",
   "description": "A Vue3.0 component - lightbox",
-  "main": "./index.js",
+  "main": "./index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,7 +10,9 @@
     "vue",
     "vue3.0",
     "typescript",
-    "lightbox"
+    "lightbox",
+    "VueJS",
+    "component"
   ],
   "bugs": {
     "url": "https://github.com/BianTan/bd-lightbox-vue/issues"

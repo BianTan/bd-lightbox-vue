@@ -1,7 +1,14 @@
-import VueLightbox from './components/index.vue'
+import BdLightbox from './src/components/index.vue'
+import lightbox from './src/directives'
+import { App } from 'vue'
 
 export default {
-  install: (vue: any) => {
-    vue.component(VueLightbox.name, VueLightbox)
+  install: (vue: App) => {
+    vue.component(BdLightbox.name, BdLightbox)
   }
+}
+
+export {
+  lightbox,
+  BdLightbox
 }
