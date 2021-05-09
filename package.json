@@ -1,6 +1,6 @@
 {
   "name": "bd-lightbox-vue",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "A Vue3.0 component - lightbox",
   "main": "./index.ts",
   "scripts": {
@@ -13,7 +13,9 @@
     "lightbox",
     "VueJS",
     "component",
-    "swiper"
+    "swiper",
+    "images",
+    "vue-component"
   ],
   "bugs": {
     "url": "https://github.com/BianTan/bd-lightbox-vue/issues"

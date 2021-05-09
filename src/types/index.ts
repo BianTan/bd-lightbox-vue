@@ -39,9 +39,15 @@ export interface UseLightBoxProps {
   switchSidebarState: () => void;
 }
 
+export interface OptionsExcluedObject {
+  [T: string]: string;
+}
+export type OptionsExcluedItem = (string | OptionsExcluedObject)
+export type OptionsExclued = OptionsExcluedItem | OptionsExcluedItem[]
 export interface OptionProps {
   getImgs?: (imgAry: string[]) => void;
   openLightbox?: (id: string) => void;
+  exclude?: OptionsExclued;
 }
 
 export interface ItemStyleProps {

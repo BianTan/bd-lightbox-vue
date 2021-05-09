@@ -1,4 +1,4 @@
-<p align="center">这是一个基于 Vue3 制作的一个图片灯箱组件</p>
+<p align="center">这是基于 Vue3 制作的一个图片灯箱组件</p>
 <p align="center">
   <a href="https://www.npmjs.com/package/bd-lightbox-vue"><img src="https://img.shields.io/npm/v/bd-lightbox-vue"/></a>
   <a href="https://github.com/BianTan/bd-lightbox-vue/blob/main/LICENSE.md"><img src="https://img.shields.io/npm/l/bd-lightbox-vue"/></a>
@@ -8,7 +8,7 @@
 ```
 npm install --save bd-lightbox-vue
 ```
-Or
+或者
 ```
 yarn add bd-lightbox-vue
 ```
@@ -49,7 +49,24 @@ export default defineComponent({
       v-html="content"
       v-lightbox="{
         getImgs: getImages,
-        openLightbox
+        openLightbox,
+        exclude: [
+          '.class-1',
+          '#id-1',
+          {
+            width: '479',
+            class: 'size-full'
+          },
+          {
+            width: '1920'
+          },
+          [
+            '.class-2',
+            {
+              class: 'class-3'
+            }
+          ]
+        ]
       }"
     >
     </div>
@@ -67,10 +84,10 @@ export default defineComponent({
     },
     setup() {
       const content = 'xxxx' // 这里是文章的html内容，包含图片
-      const images = ref(null)
-      const instance = getCurrentInstance() // 获取内部组件的实例
+      const images = ref<string[] | null>(null)
+      const instance = getCurrentInstance() // 获取组件实例
 
-      const getImgs = (images): void => {
+      const getImgs = (images: string[]): void => {
         images.value = images
       }
       const openLightbox = (id?: string) => {
@@ -128,6 +145,22 @@ export default defineComponent({
 </script>
 
 ```
+
+## 自定义指令的选项
+| 属性 | 必传 | 类型 | 描述 |
+|:------| :------ | :------ | :------ |
+| `getImgs` | ✓ | function | 获取内容部分图片的url |
+| `openLightbox` | ✓ | function  | 获取到的图片被点击的时候触发 |
+| `exclude` | × | string 或者 Object 或者 Array | 需要被排除的图片具有的属性 |
+
+## 组件的选项
+| 属性 | 必传 | 类型 | 描述 |
+|:------| :------ | :------ | :------ |
+| `buttonShowTime` | × | number | 按钮显示的时长 |
+| `spaceBetween` | × | number  | 图片之间的间隔距离 |
+| `listHeight` | × | number | 高度 |
+| `itemPosition` | × | string | 居左还是居中还是具有捏？ |
+| `isFull` | × | boolean | isFull = true 图片会占用全部宽度 |
 
 ## 事件
 

@@ -50,7 +50,24 @@ export default defineComponent({
       v-html="content"
       v-lightbox="{
         getImgs: getImages,
-        openLightbox
+        openLightbox,
+        exclude: [
+          '.class-1',
+          '#id-1',
+          {
+            width: '479',
+            class: 'size-full'
+          },
+          {
+            width: '1920'
+          },
+          [
+            '.class-2',
+            {
+              class: 'class-3'
+            }
+          ]
+        ]
       }"
     >
     </div>
@@ -64,7 +81,7 @@ export default defineComponent({
 
   export default defineComponent({
     directives: {
-      lightbox  // getImgs、openLightbox
+      lightbox  // getImgs、openLightbox、exclude
     },
     setup() {
       const content = `
@@ -137,6 +154,22 @@ export default defineComponent({
 
 ```
 
+## v-lightbox options
+| Attribute | required | type | Description |
+|:------| :------ | :------ | :------ |
+| `getImgs` | yes | function | Get a list of images |
+| `openLightbox` | yes | function  | Image clicked |
+| `exclude` | no | string or Object or Array | Image attributes that need to be excluded |
+
+## component options
+| Attribute | required | type | Description |
+|:------| :------ | :------ | :------ |
+| `buttonShowTime` | no | number | Button to show time |
+| `spaceBetween` | no | number  | Spacing of images |
+| `listHeight` | no | number | Height |
+| `itemPosition` | no | string | Positioning |
+| `isFull` | no | boolean | isFull = true The image takes up the entire width |
+
 ## Events
 
 BdLightbox also fires several events that can be further used in your Vue.js application. 
@@ -146,7 +179,7 @@ Each event has a item id ⬇️
 |:------| :------ |
 | `lightboxOpen` | when the overlay is opened |
 | `lightboxClose` | when the overlay is closed (button or ESC key or Space key) |
-| `lightboxSwitch` | 点击 lightbox 的侧边栏切换图片 |
+| `lightboxSwitch` | Lightbox sidebar item is clicked |
 | `lightboxNext` | when the user moves to the next picture (arrow or key →) |
 | `lightboxPrev` | when the user moves to the previous picture (arrow or key ←) |
 

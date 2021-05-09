@@ -1,11 +1,14 @@
+import { getExclude } from '../libs/utlis'
 import { ObjectDirective, DirectiveBinding } from 'vue'
 import { OptionProps } from '../types'
 
 export default {
   mounted(el: HTMLElement, binding = { value: undefined } as DirectiveBinding) {
-    const _ops: OptionProps | null = binding.value
+    const _ops: OptionProps | undefined = binding.value
     const imgAry: string[] = []
-    const allImg: NodeList = el.querySelectorAll('img')
+    const exclude = _ops.exclude
+    const q = getExclude(exclude)
+    const allImg: NodeList = el.querySelectorAll(`img${q}`)
 
     allImg.forEach((item: Node, index: number) => {
       const image = item as HTMLImageElement
