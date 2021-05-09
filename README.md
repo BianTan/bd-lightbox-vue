@@ -1,14 +1,21 @@
-## 安装 
+<p align="center">A lightweight lightbox inspired component for Vue.js</p>
+<p align="center">
+  <a href="https://www.npmjs.com/package/bd-lightbox-vue"><img src="https://img.shields.io/npm/v/bd-lightbox-vue"/></a>
+  <a href="https://github.com/BianTan/bd-lightbox-vue/blob/main/LICENSE.md"><img src="https://img.shields.io/npm/l/bd-lightbox-vue"/></a>
+</p>
+<a href="https://github.com/BianTan/bd-lightbox-vue/blob/master/README_zh.md" target="_blank">中文文档</a>
+
+## Installation 
 ```
 npm install --save bd-lightbox-vue
 ```
-Or
+or
 ```
 yarn add bd-lightbox-vue
 ```
 
-导入插件，并使用  
-全局导入  
+### Import the plugin into Vue
+#### Global Import  
 ```js
 import { createApp } from 'vue'
 import App from './App.vue'
@@ -17,7 +24,7 @@ import BdLightbox from 'bd-lightbox-vue'
 
 createApp(App).use(BdLightbox)
 ```
-按需导入  
+#### Import on Demand 
 ```vue
 <script lang="ts">
 import { defineComponent } from 'vue'
@@ -33,12 +40,12 @@ export default defineComponent({
 ```
 <br>
 
-## 如何使用 
-### 模式0（默认） 
+## How to use 
+### Mode 0 (default 0) 
 ```vue
 <template>
   <div>
-    <p>这是文章标题</p>
+    <p>This is Title</p>
     <div
       v-html="content"
       v-lightbox="{
@@ -53,22 +60,29 @@ export default defineComponent({
 
 <script lang="ts">
   import { defineComponent, getCurrentInstance, ref }  from 'vue'
-  import { lightbox } from 'bd-lightbox-vue'
+  import { lightbox, UseLightBoxProps } from 'bd-lightbox-vue'
 
   export default defineComponent({
     directives: {
-      lightbox  // 自定义指令，传入对象，有两个回调函数，getImgs：获取文章的图片src数组；openLightbox：点击图片时会调用。
+      lightbox  // getImgs、openLightbox
     },
     setup() {
-      const content = 'xxxx' // 这里是文章的html内容，包含图片
-      const images = ref(null)
-      const instance = getCurrentInstance() // 获取内部组件的实例
+      const content = `
+        <div>
+          this is demo
+          <img src="images/1.png">
+          <img src="images/2.png">
+          <img src="images/3.png">
+        </div>
+      ` // Dynamic Acquisition
+      const images = ref<string[] | null>(null)
+      const instance = getCurrentInstance() // Get Instance
 
-      const getImgs = (images): void => {
+      const getImgs = (images: string[]): void => {
         images.value = images
       }
       const openLightbox = (id?: string) => {
-        (instance.refs.lightboxRef as any).openLightbox(id)
+        (instance.refs.lightboxRef as UseLightBoxProps).openLightbox(id)
       }
 
       return {
@@ -83,11 +97,11 @@ export default defineComponent({
 
 ```
 
-### 模式1 
+### Mode 1 
 ```vue
 <template>
   <div>
-    <p>这是文章标题</p>
+    <p>This is Title</p>
     <BdLightbox :data="images" :options="options" mode="1" />
   </div>
 </template>
@@ -98,19 +112,19 @@ export default defineComponent({
   export default defineComponent({
     setup() {
       const options = {
-        buttonShowTime: 5000, // 可不传，单位 ms 默认为 2300
-        spaceBetween: 32, // 可不传，单位 px 默认为 24
-        listHeight: 32, // 可不传，单位 px 默认为 100%
-        itemPosition: 'left', // 可不传，值为 left | center | right 默认为 center 当 isFull 为 true 时无效果
-        isFull: true // 可不传，默认为 flase
+        buttonShowTime: 5000, // ms default: 2300. optional
+        spaceBetween: 32, // px default: 24. optional
+        listHeight: 32, // px default: 100%. optional
+        itemPosition: 'left', // left | center | right default: center. optional
+        isFull: true // default: flase. optional
       }
       const images = [
-        'images/1.png', // 字符串
+        'images/1.png', // string
         {
-          src: 'images/2.png', // 必传,
-          desc: '这里是 description', // 可不传
-          alt: '这里是 alt' // 可不传
-        }  // 或者对象
+          src: 'images/2.png', // required,
+          desc: '这里是 description', // optional
+          alt: '这里是 alt' // optional
+        }  // or object
       ]
 
       return {
@@ -123,25 +137,24 @@ export default defineComponent({
 
 ```
 
-## 事件
+## Events
 
-LightBox 还会触发几个事件 ⬇️  
+BdLightbox also fires several events that can be further used in your Vue.js application. 
+Each event has a item id ⬇️  
 
-| 事件名称 | 描述 |
+| Event name | When is event fired |
 |:------| :------ |
-| `lightboxOpen` | 遮罩打开 |
-| `lightboxClose` | 遮罩关闭 (按钮被点击 或者 点击键盘 Esc or Space) |
+| `lightboxOpen` | when the overlay is opened |
+| `lightboxClose` | when the overlay is closed (button or ESC key or Space key) |
 | `lightboxSwitch` | 点击 lightbox 的侧边栏切换图片 |
-| `lightboxNext` | 下一张图片 (按钮被点击 或者 点击键盘 方向键 →) |
-| `lightboxPrev` | 上一张图片 (按钮被点击 或者 点击键盘 方向键 ←) |
-  
-以上均有一个参数 currnetId 为当前的图片 id（从0开始）  
+| `lightboxNext` | when the user moves to the next picture (arrow or key →) |
+| `lightboxPrev` | when the user moves to the previous picture (arrow or key ←) |
 
-## 展示  
-### 电脑端 图片灯箱  
+## Demo  
+### PC 
 
-![电脑端](https://github.com/BianTan/vok-vue3/raw/main/images/lightbox_pc.png)
+![PC](https://github.com/BianTan/vok-vue3/raw/main/images/lightbox_pc.png)
 
-### 移动端 图片灯箱  
+### Phone 
 
-![移动端](https://github.com/BianTan/vok-vue3/raw/main/images/lightbox_phone.png)
+![Phone](https://github.com/BianTan/vok-vue3/raw/main/images/lightbox_phone.png)

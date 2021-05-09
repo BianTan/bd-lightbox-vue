@@ -1,5 +1,6 @@
 import BdLightbox from './src/components/index.vue'
 import lightbox from './src/directives'
+import { UseLightBoxProps } from './src/types'
 import { App } from 'vue'
 
 export default {
@@ -10,5 +11,6 @@ export default {
 
 export {
   lightbox,
-  BdLightbox
+  BdLightbox,
+  UseLightBoxProps
 }
