@@ -71,7 +71,7 @@ export default defineComponent({
       }"
     >
     </div>
-    <BdLightbox ref="lightboxRef" :data="images" />
+    <BdLightbox ref="lightboxRef" :data="images" :options="options" />
   </div>
 </template>
 
@@ -84,6 +84,14 @@ export default defineComponent({
       lightbox  // getImgs、openLightbox、exclude
     },
     setup() {
+      const options = {
+        buttonShowTime: 5000, // ms default: 2300. optional
+        spaceBetween: 32, // px default: 24. optional
+        listHeight: 32, // px default: 100%. optional
+        itemPosition: 'left', // left | center | right default: center. optional
+        isFull: true, // default: flase. optional
+        isLazyload: true  // defaulr false. optional
+      }
       const content = `
         <div>
           this is demo
@@ -103,6 +111,7 @@ export default defineComponent({
       }
 
       return {
+        options,
         content,
         getImgs,
         images,
@@ -133,14 +142,15 @@ export default defineComponent({
         spaceBetween: 32, // px default: 24. optional
         listHeight: 32, // px default: 100%. optional
         itemPosition: 'left', // left | center | right default: center. optional
-        isFull: true // default: flase. optional
+        isFull: true, // default: flase. optional
+        isLazyload: true  // defaulr false. optional
       }
       const images = [
         'images/1.png', // string
         {
           src: 'images/2.png', // required,
-          desc: '这里是 description', // optional
-          alt: '这里是 alt' // optional
+          desc: 'this is description', // optional
+          alt: 'this is alt' // optional
         }  // or object
       ]
 
@@ -169,6 +179,7 @@ export default defineComponent({
 | `listHeight` | no | number | Height |
 | `itemPosition` | no | string | Positioning |
 | `isFull` | no | boolean | isFull = true The image takes up the entire width |
+| `isLazyload` | no | boolean | isLazyload = true Images lazyload |
 
 ## Events
 

@@ -1,10 +1,10 @@
 <template>
-  <img :data-src="src" v-show="isLoaded" v-bind="$attrs" @load="loaded" ref="lazyloadRef">
+  <img :data-src="imgSrc" v-show="isLoaded" v-bind="$attrs" @load="loaded" ref="lazyImageRef">
   <div v-if="!isLoaded" class="lightbox-lazy" />
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent, ref, watchEffect } from 'vue'
 
 export default defineComponent({
   inheritAttrs: false,
@@ -20,22 +20,24 @@ export default defineComponent({
   },
   setup(props) {
     const isLoaded = ref(false)
-    const lazyloadRef = ref<HTMLImageElement | null>(null)
+    const lazyImageRef = ref<HTMLImageElement | null>(null)
 
-    const loaded = (e): void => {
-      console.log(e)
+    const loaded = (): void => {
       isLoaded.value = true
     }
 
-    watch(() => props.start, (newValue: boolean) => {
-      const target = lazyloadRef.value
-      if(newValue && !isLoaded.value && target) target.src = target.getAttribute('data-src')
+    const setImage = (): void => {
+      lazyImageRef.value.src = lazyImageRef.value.getAttribute('data-src')
+    }
+
+    watchEffect(() => {
+      if(props.start && !isLoaded.value && lazyImageRef.value) setImage()
     })
 
     return {
       loaded,
       isLoaded,
-      lazyloadRef
+      lazyImageRef
     }
   }
 })

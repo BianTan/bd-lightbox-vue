@@ -16,8 +16,15 @@
         @click="openLightbox(index)"
       >
         <img
-          :src="typeof item === 'string' ? item : item.src"
-          :alt="typeof item === 'string' ? '' : item.alt"
+          v-if="!isLazyload"
+          :src="getSrc(item)"
+          :alt="getAlt(item)"
+        />
+        <lazyload
+          v-else
+          :start="true"
+          :imgSrc="getSrc(item)"
+          :alt="getAlt(item)"
         />
       </div>
     </div>
@@ -34,16 +41,16 @@
             >
               <img
                 v-if="!isLazyload"
-                :src="typeof item === 'string' ? item : item.src"
-                :alt="typeof item === 'string' ? '' : item.alt"
+                :src="getSrc(item)"
+                :alt="getAlt(item)"
                 @click="isButtonShow = !isButtonShow"
                 class="lightbox-img"
               />
               <lazyload
                 v-else
                 :start="index === currentId"
-                :imgSrc="typeof item === 'string' ? item : item.src"
-                :alt="typeof item === 'string' ? '' : item.alt"
+                :imgSrc="getSrc(item)"
+                :alt="getAlt(item)"
                 @click="isButtonShow = !isButtonShow"
                 class="lightbox-img"
               />
@@ -85,8 +92,9 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType, ref, toRefs } from 'vue'
-import { LightBoxOptions, DataListProps } from '../types'
+import { LightBoxOptions, DataListProps, DataItemProps } from '../types'
 import { useLightBox, useStyle } from '../libs'
+import { typeString } from '../libs/utlis'
 import iconfont from './iconfont.vue'
 import Sidebar from './sidebar.vue'
 import lazyload from './lazyload.vue'
@@ -124,6 +132,13 @@ export default defineComponent({
     const options = computed(() => props.options as LightBoxOptions)
     const dataInit = computed<DataListProps>(() => props.data as DataListProps)
     const isLazyload = ref(options.value.isLazyload || false)
+ 
+    const getSrc = (value: string | DataItemProps): string => {
+      return typeString(value) ? value as string : (value as DataItemProps).src
+    }
+    const getAlt = (value: string | DataItemProps): string => {
+      return typeString(value) ? '' : (value as DataItemProps).alt
+    }
 
     const {
       itemStyle,
@@ -142,6 +157,8 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
+      getSrc,
+      getAlt,
       isLazyload,
       itemStyle,
       listStyle,

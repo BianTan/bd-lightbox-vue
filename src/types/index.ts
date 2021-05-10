@@ -48,7 +48,7 @@ export type OptionsExclued = OptionsExcluedItem | OptionsExcluedItem[]
 export interface OptionProps {
   getImgs?: (imgAry: string[]) => void;
   openLightbox?: (id: string) => void;
-  exclude?: OptionsExclued;
+  exclude?: OptionsExclued | undefined;
 }
 
 export interface ItemStyleProps {

@@ -5,7 +5,7 @@ export default class LightboxReplace {
 
   el: HTMLElement
   options: OptionProps | undefined
-  imgAry: string[]
+  imgAry: string[] = []
 
   constructor(el: HTMLElement, options: OptionProps | undefined) {
     this.el = el
@@ -15,7 +15,7 @@ export default class LightboxReplace {
   }
 
   init() {
-    const exclude = this.options.exclude,
+    const exclude = this.options && this.options.exclude,
       q = getExclude(exclude),
       allImg: NodeListOf<HTMLImageElement> = this.el.querySelectorAll(`img${q}`)
 

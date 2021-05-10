@@ -70,7 +70,7 @@ export default defineComponent({
       }"
     >
     </div>
-    <BdLightbox ref="lightboxRef" :data="images" />
+    <BdLightbox ref="lightboxRef" :data="images" :options="options" />
   </div>
 </template>
 
@@ -83,6 +83,14 @@ export default defineComponent({
       lightbox  // 自定义指令，传入对象，有两个回调函数，getImgs：获取文章的图片src数组；openLightbox：点击图片时会调用。
     },
     setup() {
+      const options = {
+        buttonShowTime: 5000, // 可不传，单位 ms 默认为 2300
+        spaceBetween: 32, // 可不传，单位 px 默认为 24
+        listHeight: 32, // 可不传，单位 px 默认为 100%
+        itemPosition: 'left', // 可不传，值为 left | center | right 默认为 center 当 isFull 为 true 时无效果
+        isFull: true, // 可不传，默认为 flase
+        isLazyload: true  // 可不传，默认为 false
+      }
       const content = 'xxxx' // 这里是文章的html内容，包含图片
       const images = ref<string[] | null>(null)
       const instance = getCurrentInstance() // 获取组件实例
@@ -95,6 +103,7 @@ export default defineComponent({
       }
 
       return {
+        options,
         content,
         getImgs,
         images,
@@ -125,7 +134,8 @@ export default defineComponent({
         spaceBetween: 32, // 可不传，单位 px 默认为 24
         listHeight: 32, // 可不传，单位 px 默认为 100%
         itemPosition: 'left', // 可不传，值为 left | center | right 默认为 center 当 isFull 为 true 时无效果
-        isFull: true // 可不传，默认为 flase
+        isFull: true, // 可不传，默认为 flase
+        isLazyload: true  // 可不传，默认为 false
       }
       const images = [
         'images/1.png', // 字符串
@@ -161,6 +171,7 @@ export default defineComponent({
 | `listHeight` | × | number | 高度 |
 | `itemPosition` | × | string | 居左还是居中还是具有捏？ |
 | `isFull` | × | boolean | isFull = true 图片会占用全部宽度 |
+| `isLazyload` | × | boolean | isLazyload = true 图片懒加载 |
 
 ## 事件
 

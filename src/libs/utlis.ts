@@ -30,18 +30,24 @@ const isObject = (target: any): boolean => {
 export const getExclude = (data: OptionsExclued): string => {
   let q: string = ''
 
-  if(typeof data === 'string') {
-    q += `:not(${data})`
-  } else if(isObject(data)) {
-    for(let key in data as OptionsExcluedObject) {
-      const value = (data as OptionsExcluedObject)[key]
-      q += `:not([${key}='${value}'])`
+  if(data) {
+    if(typeof data === 'string') {
+      q += `:not(${data})`
+    } else if(isObject(data)) {
+      for(let key in data as OptionsExcluedObject) {
+        const value = (data as OptionsExcluedObject)[key]
+        q += `:not([${key}='${value}'])`
+      }
+    } else if(!isObject(data)) {
+      (data as OptionsExcluedItem[]).forEach((item: OptionsExcluedItem) => {
+        q += getExclude(item)
+      })
     }
-  } else if(!isObject(data)) {
-    (data as OptionsExcluedItem[]).forEach((item: OptionsExcluedItem) => {
-      q += getExclude(item)
-    })
   }
 
   return q
+}
+
+export const typeString = (value: any): boolean => {
+  return typeof value === 'string'
 }
