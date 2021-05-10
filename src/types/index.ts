@@ -8,6 +8,7 @@ export interface LightBoxOptions {
   itemPosition?: ItemPosition;
   isFull?: boolean;
   buttonShowTime?: number;
+  isLazyload?: boolean;
 }
 
 export interface DataItemProps {

@@ -33,7 +33,16 @@
               @click="handleClick"
             >
               <img
+                v-if="!isLazyload"
                 :src="typeof item === 'string' ? item : item.src"
+                :alt="typeof item === 'string' ? '' : item.alt"
+                @click="isButtonShow = !isButtonShow"
+                class="lightbox-img"
+              />
+              <lazyload
+                v-else
+                :start="index === currentId"
+                :imgSrc="typeof item === 'string' ? item : item.src"
                 :alt="typeof item === 'string' ? '' : item.alt"
                 @click="isButtonShow = !isButtonShow"
                 class="lightbox-img"
@@ -75,17 +84,19 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, toRefs } from 'vue'
+import { computed, defineComponent, PropType, ref, toRefs } from 'vue'
 import { LightBoxOptions, DataListProps } from '../types'
 import { useLightBox, useStyle } from '../libs'
 import iconfont from './iconfont.vue'
 import Sidebar from './sidebar.vue'
+import lazyload from './lazyload.vue'
 
 export default defineComponent({
   name: 'BdLightbox',
   components: {
     iconfont,
-    Sidebar
+    Sidebar,
+    lazyload
   },
   props: {
     data: {
@@ -112,6 +123,7 @@ export default defineComponent({
 
     const options = computed(() => props.options as LightBoxOptions)
     const dataInit = computed<DataListProps>(() => props.data as DataListProps)
+    const isLazyload = ref(options.value.isLazyload || false)
 
     const {
       itemStyle,
@@ -130,6 +142,7 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
+      isLazyload,
       itemStyle,
       listStyle,
       openLightbox,
