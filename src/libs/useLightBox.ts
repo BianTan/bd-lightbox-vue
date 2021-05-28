@@ -26,7 +26,7 @@ export default function (buttonShowTime: number, data: ComputedRef<DataListProps
    * 重置 setTimeout
   */
   const resetTimer = () => {
-    if(state.timer) clearTimeout(state.timer)
+    if (state.timer) clearTimeout(state.timer)
     if (state.isButtonShow) {
       state.timer = window.setTimeout(
         () => state.isButtonShow = false,
@@ -79,7 +79,7 @@ export default function (buttonShowTime: number, data: ComputedRef<DataListProps
     state.currentId < data.value.length - 1
       ? state.currentId++
       : (state.currentId = 0)
-      emit('lightboxNext', state.currentId)
+    emit('lightboxNext', state.currentId)
     resetTimer()
   }
   /**
@@ -117,7 +117,7 @@ export default function (buttonShowTime: number, data: ComputedRef<DataListProps
   const throttleShow = throttle(buttonShow, 50)
 
   const setEvent = (isAdd = true) => {
-    if(isAdd) {
+    if (isAdd) {
       document.body.style.overflow = 'hidden'
       window.addEventListener('keydown', throttleKeydoen)
       window.addEventListener('mousemove', throttleShow)
@@ -132,7 +132,7 @@ export default function (buttonShowTime: number, data: ComputedRef<DataListProps
    * 监听状态变化
   */
   watch([() => state.isButtonShow, () => state.isShow], (newValue, oldValue) => {
-    if(newValue[0] !== oldValue[0]) {
+    if (newValue[0] !== oldValue[0]) {
       clearTimeout(state.timer)
       if (newValue[0]) {
         // 这个是 isButtonShow

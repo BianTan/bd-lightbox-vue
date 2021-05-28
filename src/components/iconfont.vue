@@ -3,21 +3,21 @@
 </template>
 
 <style scoped>
-@import '../common/css/iconfont.css';
+@import "../common/css/iconfont.css";
 
 .lightbox-icon {
-  opacity: .8;
+  opacity: 0.8;
   display: flex;
   width: 40px;
   height: 40px;
-  color: #FFFFFF;
+  color: #ffffff;
   cursor: pointer;
   font-size: 20px;
   line-height: 28px;
   position: absolute;
   align-items: center;
   justify-content: center;
-  transition: all .3s ease-in-out;
+  transition: all 0.3s ease-in-out;
   background-color: rgba(31, 41, 55);
 }
 .lightbox-icon:hover {

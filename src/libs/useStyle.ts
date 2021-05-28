@@ -14,7 +14,7 @@ export default function (options: ComputedRef<LightBoxOptions>, data: ComputedRe
     isFull = false,
     itemPosition = 'center'
   } = options.value
-  
+
   const itemStyle = computed<ItemStyleProps>(() => {
     const styleKey = isFull ? 'width' : 'maxWidth'
     const style = {
@@ -26,7 +26,7 @@ export default function (options: ComputedRef<LightBoxOptions>, data: ComputedRe
   const listStyle = computed<ListStyleProps>(() => {
     const style: ListStyleProps = {}
     let position
-      
+
     switch (itemPosition) {
       case 'left':
         position = 'end'

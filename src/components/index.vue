@@ -1,13 +1,6 @@
 <template>
-  <div
-    class="lightbox"
-    v-if="data.length > 0"
-  >
-    <div
-      class="lightbox-list"
-      v-if="mode === '1'"
-      :style="listStyle"
-    >
+  <div class="lightbox" v-if="data.length > 0">
+    <div class="lightbox-list" v-if="mode === '1'" :style="listStyle">
       <div
         class="lightbox-item"
         v-for="(item, index) of data"
@@ -15,17 +8,8 @@
         :style="itemStyle"
         @click="openLightbox(index)"
       >
-        <img
-          v-if="!isLazyload"
-          :src="getSrc(item)"
-          :alt="getAlt(item)"
-        />
-        <lazyload
-          v-else
-          :start="true"
-          :imgSrc="getSrc(item)"
-          :alt="getAlt(item)"
-        />
+        <img v-if="!isLazyload" :src="getSrc(item)" :alt="getAlt(item)" />
+        <lazyload v-else :start="true" :imgSrc="getSrc(item)" :alt="getAlt(item)" />
       </div>
     </div>
     <transition name="lightbox">
@@ -54,28 +38,16 @@
                 @click="isButtonShow = !isButtonShow"
                 class="lightbox-img"
               />
-              <p v-if="typeof item === 'object' && item.desc">{{item.desc}}</p>
+              <p v-if="typeof item === 'object' && item.desc">{{ item.desc }}</p>
             </div>
           </transition-group>
           <transition name="lightbox-row">
             <div v-show="isButtonShow" class="lightbox-group">
               <span>{{ currentId + 1 }} / {{ data.length }}</span>
-              <iconfont
-                @click="goPrev"
-                class="icon-down icon-prev"
-              />
-              <iconfont
-                @click="goNext"
-                class="icon-down icon-next"
-              />
-              <iconfont
-                class="icon-close"
-                @click="isShow = sidebarIsShow = false"
-              />
-              <iconfont
-                class="icon-menu"
-                @click="switchSidebarState"
-              />
+              <iconfont @click="goPrev" class="icon-down icon-prev" />
+              <iconfont @click="goNext" class="icon-down icon-next" />
+              <iconfont class="icon-close" @click="isShow = sidebarIsShow = false" />
+              <iconfont class="icon-menu" @click="switchSidebarState" />
             </div>
           </transition>
         </div>
@@ -132,12 +104,12 @@ export default defineComponent({
     const options = computed(() => props.options as LightBoxOptions)
     const dataInit = computed<DataListProps>(() => props.data as DataListProps)
     const isLazyload = ref(options.value.isLazyload || false)
- 
+
     const getSrc = (value: string | DataItemProps): string => {
-      return typeString(value) ? value as string : (value as DataItemProps).src
+      return typeString(value) ? value as string : ((value as DataItemProps).src || '')
     }
     const getAlt = (value: string | DataItemProps): string => {
-      return typeString(value) ? '' : (value as DataItemProps).alt
+      return typeString(value) ? '' : ((value as DataItemProps).alt || '')
     }
 
     const {
@@ -207,7 +179,7 @@ export default defineComponent({
   z-index: 50;
   overflow: hidden;
   user-select: none;
-  background-color: rgba(31, 41, 55, .8);
+  background-color: rgba(31, 41, 55, 0.8);
 }
 .lightbox-wrapper {
   flex: 1;
@@ -225,7 +197,7 @@ export default defineComponent({
   justify-content: center;
 }
 .lightbox-row p {
-  color: #FFF;
+  color: #fff;
   margin-top: 24px;
   text-align: center;
 }
@@ -238,19 +210,19 @@ export default defineComponent({
   position: absolute;
   top: 8px;
   left: 8px;
-  color: #FFFFFF;
+  color: #ffffff;
   font-size: 12px;
   line-height: 16px;
 }
 .lightbox-group .icon-prev {
   left: 16px;
   top: 50%;
-  transform: translate(0 , -50%) rotate(90deg);
+  transform: translate(0, -50%) rotate(90deg);
 }
 .lightbox-group .icon-next {
   right: 16px;
   top: 50%;
-  transform: translate(0 , -50%) rotate(-90deg);
+  transform: translate(0, -50%) rotate(-90deg);
 }
 .lightbox-group .icon-close {
   top: 0;
@@ -263,7 +235,7 @@ export default defineComponent({
 
 .lightbox-enter-active,
 .lightbox-leave-active {
-  transition: all .3s ease-in-out;
+  transition: all 0.3s ease-in-out;
   opacity: 0;
 }
 .lightbox-enter-to,
@@ -276,7 +248,7 @@ export default defineComponent({
 }
 .lightbox-row-enter-active,
 .lightbox-row-leave-active {
-  transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
   opacity: 0;
 }
 .lightbox-row-enter-to,

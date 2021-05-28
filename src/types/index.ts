@@ -43,8 +43,8 @@ export interface UseLightBoxProps {
 export interface OptionsExcluedObject {
   [T: string]: string;
 }
-export type OptionsExcluedItem = (string | OptionsExcluedObject)
-export type OptionsExclued = OptionsExcluedItem | OptionsExcluedItem[]
+export type OptionsExcluedItem = string | OptionsExcluedObject
+export type OptionsExclued = (OptionsExcluedItem | OptionsExcluedItem[])
 export interface OptionProps {
   getImgs?: (imgAry: string[]) => void;
   openLightbox?: (id: string) => void;

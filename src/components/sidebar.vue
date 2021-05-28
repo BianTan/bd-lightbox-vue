@@ -46,7 +46,7 @@ export default defineComponent({
 .lightbox-sidebar {
   width: 128px;
   height: 100%;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   overflow: hidden;
   overflow-y: auto;
   display: flex;
@@ -67,7 +67,7 @@ export default defineComponent({
   object-fit: cover;
   box-sizing: border-box;
   border: 4px solid transparent;
-  transition: border .3s ease-in-out;
+  transition: border 0.3s ease-in-out;
 }
 @media (min-width: 768px) {
   .lightbox-sidebar {

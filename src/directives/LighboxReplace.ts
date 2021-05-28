@@ -1,4 +1,4 @@
-import { OptionProps } from '../types'
+import { OptionProps, OptionsExclued } from '../types'
 import { getExclude } from '../libs/utlis'
 
 export default class LightboxReplace {
@@ -15,7 +15,7 @@ export default class LightboxReplace {
   }
 
   init() {
-    const exclude = this.options && this.options.exclude,
+    const exclude = (this.options && this.options.exclude as OptionsExclued),
       q = getExclude(exclude),
       allImg: NodeListOf<HTMLImageElement> = this.el.querySelectorAll(`img${q}`)
 
@@ -30,7 +30,7 @@ export default class LightboxReplace {
       } else {
         link.setAttribute('data-lightbox', index.toString())
       }
-      
+
       this.imgAry.push(image.src)  // 将图片的链接添加进 imgAry 数组内
     })
 
@@ -38,19 +38,18 @@ export default class LightboxReplace {
   }
 
   bindEvent() {
-    const { openLightbox, getImgs } = this.options
 
     this.el.addEventListener('click', (e: Event) => {
       const target = e.target as HTMLElement,
-        id: string = (target.parentNode as HTMLElement).getAttribute('data-lightbox')  // 获取当前点击图片父元素a的data-lightbox属性
+        id: string = ((target.parentNode as HTMLElement).getAttribute('data-lightbox') || '')  // 获取当前点击图片父元素a的data-lightbox属性
 
-      if(id && typeof id === 'string') {
+      if (id && typeof id === 'string') {
         e.preventDefault()  // 阻止默认事件
-        if(this.options && openLightbox) openLightbox(id) // 回调函数，使用图片暗箱展示当前点击的图片
+        if (this.options && this.options.openLightbox) this.options.openLightbox(id) // 回调函数，使用图片暗箱展示当前点击的图片
       }
 
     })
 
-    if(this.options && getImgs) getImgs(this.imgAry) // 回调函数，参数是获取到的图片路径数组
+    if (this.options && this.options.getImgs) this.options.getImgs(this.imgAry) // 回调函数，参数是获取到的图片路径数组
   }
 }
